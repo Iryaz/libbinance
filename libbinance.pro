@@ -9,6 +9,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        libbinance.cpp \
         src/binacpp.cpp \
         src/binacpp_logger.cpp \
         src/binacpp_utils.cpp \
@@ -16,13 +17,15 @@ SOURCES += \
         json/jsoncpp.cpp
 
 HEADERS += \
-        include/binacpp.h \
-        include/binacpp_logger.h \
-        include/binacpp_utils.h \
-        include/binacpp_websocket.h
+        binacpp/binacpp.h \
+        binacpp/binacpp_logger.h \
+        binacpp/binacpp_utils.h \
+        binacpp/binacpp_websocket.h \
+        libbinance.h
 
 INCLUDEPATH += ./
-INCLUDEPATH += include/
+INCLUDEPATH += ./include/
+INCLUDEPATH += binacpp/
 INCLUDEPATH += json/
 INCLUDEPATH += openssl/
 INCLUDEPATH += curl/

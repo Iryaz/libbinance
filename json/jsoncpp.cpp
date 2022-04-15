@@ -1,4 +1,4 @@
-/// Json-cpp amalgated source (http://jsoncpp.sourceforge.net/).
+﻿/// Json-cpp amalgated source (http://jsoncpp.sourceforge.net/).
 /// It is intended to be used with #include "json/json.h"
 
 // //////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ license you like.
 
 
 
-#include "json/json.h"
+#include <json.h>
 
 #ifndef JSON_IS_AMALGAMATION
 #error "Compile with -I PATH_TO_JSON_DIRECTORY"
