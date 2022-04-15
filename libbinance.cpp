@@ -205,7 +205,7 @@ void libbinance::initWebSocket()
     BinaCPP_websocket::init();
 }
 
-void libbinance::connect_endpoint(libbinance::CB usr_cb, const char *path)
+void libbinance::connect_endpoint(WebSocketCallbackObj *usr_cb, const char *path)
 {
     BinaCPP_websocket::connect_endpoint(usr_cb, path);
 }

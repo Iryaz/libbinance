@@ -1,4 +1,4 @@
-
+﻿
 
 #include "binacpp_websocket.h"
 #include "binacpp_logger.h"
@@ -17,7 +17,7 @@ struct lws_protocols BinaCPP_websocket::protocols[] =
 	{ NULL, NULL, 0, 0 } /* terminator */
 };
 
-map <struct lws *,CB> BinaCPP_websocket::handles ;
+map <struct lws *, libbinance::WebSocketCallbackObj*> BinaCPP_websocket::handles ;
 
 
 
@@ -45,7 +45,7 @@ BinaCPP_websocket::event_cb( struct lws *wsi, enum lws_callback_reasons reason, 
 				reader.parse( str_result , json_result );
 
 				if ( handles.find( wsi ) != handles.end() ) {
-					handles[wsi]( json_result );
+                    handles[wsi]->CallBack(json_result);
 				}
 
 			} catch ( exception &e ) {
@@ -95,7 +95,7 @@ BinaCPP_websocket::init( )
 void
 BinaCPP_websocket::connect_endpoint ( 
 
-		CB cb,
+        libbinance::WebSocketCallbackObj* cb,
 		const char *path
 
 	) 

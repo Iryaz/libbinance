@@ -13,6 +13,7 @@
 #include <exception>
 
 #include <json.h>
+#include "libbinance.h"
 #include <libwebsockets.h>
 
 
@@ -22,21 +23,18 @@
 
 using namespace std;
 
-typedef int (*CB)(Json::Value &json_value );
-
-
 class BinaCPP_websocket {
 
 
 	static struct lws_context *context;
 	static struct lws_protocols protocols[]; 
 
-	static map <struct lws *,CB> handles ;
+    static map <struct lws *, libbinance::WebSocketCallbackObj*> handles ;
 	
 	public:
 		static int  event_cb( struct lws *wsi, enum lws_callback_reasons reason, void *user, void *in, size_t len );
 		static void connect_endpoint(
-			CB user_cb,
+            libbinance::WebSocketCallbackObj* user_cb,
 			const char* path
 		);
 		static void init();
