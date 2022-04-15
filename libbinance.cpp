@@ -2,17 +2,17 @@
 #include "binacpp.h"
 #include "binacpp_websocket.h"
 
-void init(std::string &api_key, std::string &secret_key)
+void libbinance::init(std::string &api_key, std::string &secret_key)
 {
     BinaCPP::init(api_key, secret_key);
 }
 
-void cleanup()
+void libbinance::cleanup()
 {
     BinaCPP::cleanup();
 }
 
-void get_exchangeInfo(Json::Value &json_result)
+void libbinance::get_exchangeInfo(Json::Value &json_result)
 {
     BinaCPP::get_exchangeInfo(json_result);
 }
@@ -22,53 +22,53 @@ void get_serverTime(Json::Value &json_result)
     BinaCPP::get_serverTime(json_result);
 }
 
-void get_allPrices(Json::Value &json_result)
+void libbinance::get_allPrices(Json::Value &json_result)
 {
     BinaCPP::get_allPrices(json_result);
 }
 
-double get_price(const char *symbol)
+double libbinance::get_price(const char *symbol)
 {
     return BinaCPP::get_price(symbol);
 }
 
-void get_allBookTickers(Json::Value &json_result )
+void libbinance::get_allBookTickers(Json::Value &json_result )
 {
     BinaCPP::get_allBookTickers(json_result);
 }
 
-void get_bookTicker(const char *symbol, Json::Value &json_result)
+void libbinance::get_bookTicker(const char *symbol, Json::Value &json_result)
 {
     BinaCPP::get_bookTicker(symbol, json_result);
 }
 
-void get_depth(const char *symbol, int limit, Json::Value &json_result)
+void libbinance::get_depth(const char *symbol, int limit, Json::Value &json_result)
 {
     BinaCPP::get_depth(symbol, limit, json_result);
 }
 
-void get_aggTrades(const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result)
+void libbinance::get_aggTrades(const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result)
 {
     BinaCPP::get_aggTrades(symbol, fromId, startTime, endTime, limit, json_result);
 }
 
-void get_24hr(const char *symbol, Json::Value &json_result)
+void libbinance::get_24hr(const char *symbol, Json::Value &json_result)
 {
     BinaCPP::get_24hr(symbol, json_result);
 }
 
-void get_klines(const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime, Json::Value &json_result)
+void libbinance::get_klines(const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime, Json::Value &json_result)
 {
     BinaCPP::get_klines(symbol, interval, limit, startTime, endTime, json_result);
 }
 
 // API + Secret keys required
-void get_account(long recvWindow, Json::Value &json_result)
+void libbinance::get_account(long recvWindow, Json::Value &json_result)
 {
     BinaCPP::get_account(recvWindow, json_result);
 }
 
-void get_myTrades(
+void libbinance::get_myTrades(
     const char *symbol,
     int limit,
     long fromId,
@@ -79,7 +79,7 @@ void get_myTrades(
     BinaCPP::get_myTrades(symbol, limit, fromId, recvWindow, json_result);
 }
 
-void get_openOrders(
+void libbinance::get_openOrders(
     const char *symbol,
     long recvWindow,
     Json::Value &json_result
@@ -89,7 +89,7 @@ void get_openOrders(
 }
 
 
-void get_allOrders(
+void libbinance::get_allOrders(
     const char *symbol,
     long orderId,
     int limit,
@@ -101,7 +101,7 @@ void get_allOrders(
 }
 
 
-void send_order(
+void libbinance::send_order(
     const char *symbol,
     const char *side,
     const char *type,
@@ -118,7 +118,7 @@ void send_order(
 }
 
 
-void get_order(
+void libbinance::get_order(
     const char *symbol,
     long orderId,
     const char *origClientOrderId,
@@ -129,7 +129,7 @@ void get_order(
 }
 
 
-void cancel_order(
+void libbinance::cancel_order(
     const char *symbol,
     long orderId,
     const char *origClientOrderId,
@@ -142,23 +142,23 @@ void cancel_order(
 }
 
 // API key required
-void start_userDataStream(Json::Value &json_result)
+void libbinance::start_userDataStream(Json::Value &json_result)
 {
     BinaCPP::start_userDataStream(json_result);
 }
 
-void keep_userDataStream(const char *listenKey)
+void libbinance::keep_userDataStream(const char *listenKey)
 {
     BinaCPP::keep_userDataStream(listenKey);
 }
 
-void close_userDataStream(const char *listenKey)
+void libbinance::close_userDataStream(const char *listenKey)
 {
     BinaCPP::close_userDataStream(listenKey);
 }
 
 // WAPI
-void withdraw(
+void libbinance::withdraw(
     const char *asset,
     const char *address,
     const char *addressTag,
@@ -170,7 +170,7 @@ void withdraw(
     BinaCPP::withdraw(asset, address, addressTag, amount, name, recvWindow, json_result);
 }
 
-void get_depositHistory(
+void libbinance::get_depositHistory(
     const char *asset,
     int  status,
     long startTime,
@@ -181,7 +181,7 @@ void get_depositHistory(
     BinaCPP::get_depositHistory(asset, status, startTime, endTime, recvWindow, json_result);
 }
 
-void get_withdrawHistory(
+void libbinance::get_withdrawHistory(
     const char *asset,
     int  status,
     long startTime,
@@ -192,7 +192,7 @@ void get_withdrawHistory(
     BinaCPP::get_withdrawHistory(asset, status, startTime, endTime, recvWindow, json_result);
 }
 
-void get_depositAddress(
+void libbinance::get_depositAddress(
     const char *asset,
     long recvWindow,
     Json::Value &json_result)
@@ -200,17 +200,17 @@ void get_depositAddress(
     BinaCPP::get_depositAddress(asset, recvWindow, json_result);
 }
 
-void initWebSocket()
+void libbinance::initWebSocket()
 {
     BinaCPP_websocket::init();
 }
 
-void connect_endpoint(libbinance::CB usr_cb, const char *path)
+void libbinance::connect_endpoint(libbinance::CB usr_cb, const char *path)
 {
     BinaCPP_websocket::connect_endpoint(usr_cb, path);
 }
 
-void enter_event_loop_webSocket()
+void libbinance::enter_event_loop_webSocket()
 {
     BinaCPP_websocket::enter_event_loop();
 }
