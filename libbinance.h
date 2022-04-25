@@ -124,6 +124,7 @@ void get_depositAddress(
 
 void initWebSocket();
 void connect_endpoint(WebSocketCallbackObj* usr_cb, const char *path);
+bool remove_endpoint(WebSocketCallbackObj* usr_cb);
 void enter_event_loop_webSocket();
 
 }

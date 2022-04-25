@@ -37,6 +37,8 @@ class BinaCPP_websocket {
             libbinance::WebSocketCallbackObj* user_cb,
 			const char* path
 		);
+
+        static bool remove_endpoint(libbinance::WebSocketCallbackObj* cb);
 		static void init();
 		static void enter_event_loop();
 

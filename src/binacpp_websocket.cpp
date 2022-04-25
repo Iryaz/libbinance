@@ -121,6 +121,19 @@ BinaCPP_websocket::connect_endpoint (
 
 }
 
+bool
+BinaCPP_websocket::remove_endpoint(libbinance::WebSocketCallbackObj* cb)
+{
+    for (auto itr = handles.begin(); itr != handles.end(); itr++) {
+        if (itr->second == cb) {
+            handles.erase(itr);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 
 //----------------------------
 // Entering event loop

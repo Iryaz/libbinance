@@ -1,2 +1,7 @@
 *.a
 dll/libbinance.dll 
+/release
+/debug
+Makefile.Debug
+Makefile.Release
+Makefile

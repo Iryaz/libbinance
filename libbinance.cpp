@@ -210,6 +210,11 @@ void libbinance::connect_endpoint(WebSocketCallbackObj *usr_cb, const char *path
     BinaCPP_websocket::connect_endpoint(usr_cb, path);
 }
 
+bool libbinance::remove_endpoint(WebSocketCallbackObj* usr_cb)
+{
+    return BinaCPP_websocket::remove_endpoint(usr_cb);
+}
+
 void libbinance::enter_event_loop_webSocket()
 {
     BinaCPP_websocket::enter_event_loop();
