@@ -47,7 +47,7 @@ void libbinance::get_depth(const char *symbol, int limit, Json::Value &json_resu
     BinaCPP::get_depth(symbol, limit, json_result);
 }
 
-void libbinance::get_aggTrades(const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result)
+void libbinance::get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result)
 {
     BinaCPP::get_aggTrades(symbol, fromId, startTime, endTime, limit, json_result);
 }
@@ -57,7 +57,7 @@ void libbinance::get_24hr(const char *symbol, Json::Value &json_result)
     BinaCPP::get_24hr(symbol, json_result);
 }
 
-void libbinance::get_klines(const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime, Json::Value &json_result)
+void libbinance::get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result)
 {
     BinaCPP::get_klines(symbol, interval, limit, startTime, endTime, json_result);
 }

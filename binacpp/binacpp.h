@@ -33,6 +33,8 @@
 
 using namespace std;
 
+typedef unsigned long long timestamp_t;
+
 class BinaCPP {
 
 	static string api_key;
@@ -64,9 +66,9 @@ class BinaCPP {
 		static void get_bookTicker( const char *symbol, Json::Value &json_result ) ;
 
 		static void get_depth( const char *symbol, int limit, Json::Value &json_result );
-		static void get_aggTrades( const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result ); 
+        static void get_aggTrades( const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result );
 		static void get_24hr( const char *symbol, Json::Value &json_result ); 
-		static void get_klines( const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime,  Json::Value &json_result );
+        static void get_klines( const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime,  Json::Value &json_result );
 
 
 		// API + Secret keys required

@@ -2,11 +2,16 @@
 #define LIBBINANCE_H
 
 #include <string>
-#include <json/json.h>
+#include <json.h>
 
 namespace libbinance {
 
-typedef int (*CB)(Json::Value &json_value );
+typedef unsigned long long timestamp_t;
+
+class WebSocketCallbackObj {
+public:
+    virtual int CallBack(Json::Value &json_value) = 0;
+};
 
 void init(std::string &api_key, std::string &secret_key);
 void cleanup();
@@ -21,9 +26,9 @@ void get_allBookTickers(Json::Value &json_result );
 void get_bookTicker(const char *symbol, Json::Value &json_result) ;
 
 void get_depth(const char *symbol, int limit, Json::Value &json_result);
-void get_aggTrades(const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result);
+void get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result);
 void get_24hr(const char *symbol, Json::Value &json_result);
-void get_klines(const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime, Json::Value &json_result);
+void get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result);
 
 // API + Secret keys required
 void get_account(long recvWindow, Json::Value &json_result);
@@ -120,7 +125,8 @@ void get_depositAddress(
     Json::Value &json_result);
 
 void initWebSocket();
-void connect_endpoint(CB usr_cb, const char *path);
+void connect_endpoint(WebSocketCallbackObj* usr_cb, const char *path);
+bool remove_endpoint(WebSocketCallbackObj* usr_cb);
 void enter_event_loop_webSocket();
 
 }

@@ -1,4 +1,4 @@
-
+﻿
 
 /*
 	Author: tensaix2j
@@ -14,9 +14,6 @@
 #include "binacpp.h"
 #include "binacpp_logger.h"
 #include "binacpp_utils.h"
-
-
-
 
 string BinaCPP::api_key = "";
 string BinaCPP::secret_key = "";
@@ -303,8 +300,8 @@ void
 BinaCPP::get_aggTrades( 
 	const char *symbol, 
 	int fromId, 
-	time_t startTime, 
-	time_t endTime, 
+    timestamp_t startTime,
+    timestamp_t endTime,
 	int limit, 
 	Json::Value &json_result 
 ) 
@@ -433,8 +430,8 @@ BinaCPP::get_klines(
 	const char *symbol, 
 	const char *interval, 
 	int limit, 
-	time_t startTime, 
-	time_t endTime,  
+    timestamp_t startTime,
+    timestamp_t endTime,
 	Json::Value &json_result ) 
 {		
 

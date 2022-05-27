@@ -6,6 +6,8 @@
 
 namespace libbinance {
 
+typedef unsigned long long timestamp_t;
+
 class WebSocketCallbackObj {
 public:
     virtual int CallBack(Json::Value &json_value) = 0;
@@ -24,9 +26,9 @@ void get_allBookTickers(Json::Value &json_result );
 void get_bookTicker(const char *symbol, Json::Value &json_result) ;
 
 void get_depth(const char *symbol, int limit, Json::Value &json_result);
-void get_aggTrades(const char *symbol, int fromId, time_t startTime, time_t endTime, int limit, Json::Value &json_result);
+void get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result);
 void get_24hr(const char *symbol, Json::Value &json_result);
-void get_klines(const char *symbol, const char *interval, int limit, time_t startTime, time_t endTime, Json::Value &json_result);
+void get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result);
 
 // API + Secret keys required
 void get_account(long recvWindow, Json::Value &json_result);
