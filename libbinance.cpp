@@ -17,6 +17,11 @@ void libbinance::get_exchangeInfo(Json::Value &json_result)
     BinaCPP::get_exchangeInfo(json_result);
 }
 
+void libbinance::get_serverTime(Json::Value &json_result)
+{
+    BinaCPP::get_serverTime(json_result);
+}
+
 void get_serverTime(Json::Value &json_result)
 {
     BinaCPP::get_serverTime(json_result);
