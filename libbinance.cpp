@@ -68,9 +68,9 @@ void libbinance::get_klines(const char *symbol, const char *interval, int limit,
 }
 
 // API + Secret keys required
-void libbinance::get_account(long recvWindow, Json::Value &json_result)
+void libbinance::get_account(long recvWindow, timestamp_t timestamp, Json::Value &json_result)
 {
-    BinaCPP::get_account(recvWindow, json_result);
+    BinaCPP::get_account(recvWindow, timestamp, json_result);
 }
 
 void libbinance::get_myTrades(

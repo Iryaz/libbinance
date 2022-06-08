@@ -509,7 +509,7 @@ timestamp	LONG	YES
 
 
 void 
-BinaCPP::get_account( long recvWindow,  Json::Value &json_result ) 
+BinaCPP::get_account( long recvWindow, unsigned long long timestamp,  Json::Value &json_result )
 {	
 
 	BinaCPP_logger::write_log( "<BinaCPP::get_account>" ) ;
@@ -526,7 +526,7 @@ BinaCPP::get_account( long recvWindow,  Json::Value &json_result )
 	
 
 	string querystring("timestamp=");
-	querystring.append( to_string( get_current_ms_epoch() ) );
+    querystring.append( to_string( timestamp ) );
 
 	if ( recvWindow > 0 ) {
 		querystring.append("&recvWindow=");

@@ -31,7 +31,7 @@ void get_24hr(const char *symbol, Json::Value &json_result);
 void get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result);
 
 // API + Secret keys required
-void get_account(long recvWindow, Json::Value &json_result);
+void get_account(long recvWindow, timestamp_t timestamp, Json::Value &json_result);
 
 void get_myTrades(
     const char *symbol,
