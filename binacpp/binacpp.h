@@ -98,18 +98,17 @@ class BinaCPP {
 		);
 
 
-		static void send_order( 
-			const char *symbol, 
-			const char *side,
-			const char *type,
-			const char *timeInForce,
-			double quantity,
-			double price,
-			const char *newClientOrderId,
-			double stopPrice,
-			double icebergQty,
-			long recvWindow,
-			Json::Value &json_result ) ;
+        static void send_order(const char *symbol,
+            const char *side,
+            const char *type,
+            const char *timeInForce,
+            double quantity,
+            double price,
+            const char *newClientOrderId,
+            double stopPrice,
+            double icebergQty,
+            long recvWindow, timestamp_t timestamp,
+            Json::Value &json_result ) ;
 
 
 		static void get_order( 

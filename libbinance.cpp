@@ -105,6 +105,19 @@ void libbinance::get_allOrders(
     BinaCPP::get_allOrders(symbol, orderId, limit, recvWindow, json_result);
 }
 
+void libbinance::send_limit_order(const char *symbol, const char* side, double price, double qty, Json::Value &json_result)
+{
+    Json::Value serverTime;
+    timestamp_t timestamp;
+    get_serverTime(serverTime);
+    timestamp = serverTime["serverTime"].asUInt64();
+    send_order(symbol, side, "LIMIT", "GTC", qty, price, nullptr, 0, 0, 5000, timestamp, json_result);
+}
+
+void libbinance::send_market_order(const char *symbol, const char *side, double qty, timestamp_t timestamp, Json::Value &json_result)
+{
+    send_order(symbol, side, "MARKET", "GTC", qty, 0, "", 0, 0, timestamp, 5000, json_result);
+}
 
 void libbinance::send_order(
     const char *symbol,
@@ -116,10 +129,14 @@ void libbinance::send_order(
     const char *newClientOrderId,
     double stopPrice,
     double icebergQty,
+    timestamp_t timestamp,
     long recvWindow,
     Json::Value &json_result)
 {
-    BinaCPP::send_order(symbol, side, type, timeInForce, quantity, price, newClientOrderId, stopPrice, icebergQty, recvWindow, json_result);
+    BinaCPP::send_order(symbol, side, type, timeInForce,
+                        quantity, price, newClientOrderId,
+                        stopPrice, icebergQty, recvWindow, timestamp,
+                        json_result);
 }
 
 

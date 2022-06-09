@@ -911,6 +911,7 @@ BinaCPP::send_order(
 	double stopPrice,
 	double icebergQty,
 	long recvWindow,
+    timestamp_t timestamp,
 	Json::Value &json_result ) 
 {	
 
@@ -967,7 +968,7 @@ BinaCPP::send_order(
 
 
 	post_data.append("&timestamp=");
-	post_data.append( to_string( get_current_ms_epoch() ) );
+    post_data.append( to_string( timestamp ) );
 
 	string signature =  hmac_sha256( secret_key.c_str(), post_data.c_str() );
 	post_data.append( "&signature=");
@@ -1830,14 +1831,14 @@ BinaCPP::curl_api_with_header( string &url, string &str_result, vector <string> 
 		curl_easy_setopt(BinaCPP::curl, CURLOPT_SSL_VERIFYPEER, false);
 		curl_easy_setopt(BinaCPP::curl, CURLOPT_ENCODING, "gzip");
 
-		if ( extra_http_header.size() > 0 ) {
+        if ( extra_http_header.size() > 0 ) {
 			
 			struct curl_slist *chunk = NULL;
 			for ( int i = 0 ; i < extra_http_header.size() ;i++ ) {
 				chunk = curl_slist_append(chunk, extra_http_header[i].c_str() );
 			}
 			curl_easy_setopt(BinaCPP::curl, CURLOPT_HTTPHEADER, chunk);
-		}
+        }
 
 		if ( post_data.size() > 0 || action == "POST" || action == "PUT" || action == "DELETE" ) {
 
