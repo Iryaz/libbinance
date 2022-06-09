@@ -5,3 +5,4 @@ dll/libbinance.dll
 Makefile.Debug
 Makefile.Release
 Makefile
+.qmake.stash

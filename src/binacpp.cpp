@@ -1002,7 +1002,7 @@ BinaCPP::send_order(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::send_order> Done.\n" ) ;
-
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
