@@ -56,8 +56,8 @@ void get_allOrders(
     Json::Value &json_result
 );
 
-void send_limit_order(const char *symbol, const char *side, double price, double qty, Json::Value &json_result);
-void send_market_order(const char *symbol, const char *side, double qty, timestamp_t timestamp, Json::Value &json_result);
+void send_limit_order(const char *symbol, const char *side, double price, double qty, Json::Value &json_result, int recvWindow = 5000);
+void send_market_order(const char *symbol, const char *side, double qty, Json::Value &json_result, int recvWindow = 5000);
 
 void send_order(const char *symbol,
     const char *side,
