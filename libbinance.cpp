@@ -139,7 +139,8 @@ void libbinance::send_order(
 {
     BinaCPP::send_order(symbol, side, type, timeInForce,
                         quantity, price, newClientOrderId,
-                        stopPrice, icebergQty, recvWindow, timestamp,
+                        stopPrice, icebergQty, timestamp,
+                        recvWindow,
                         json_result);
 }
 

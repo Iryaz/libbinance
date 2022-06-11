@@ -107,7 +107,8 @@ class BinaCPP {
             const char *newClientOrderId,
             double stopPrice,
             double icebergQty,
-            long recvWindow, timestamp_t timestamp,
+            timestamp_t timestamp,
+            long recvWindow,
             Json::Value &json_result ) ;
 
 

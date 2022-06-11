@@ -69,6 +69,8 @@ BinaCPP::get_exchangeInfo( Json::Value &json_result)
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_exchangeInfo> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 //------------------
 //GET /api/v1/time
@@ -99,6 +101,8 @@ BinaCPP::get_serverTime( Json::Value &json_result)
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_serverTime> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -135,6 +139,8 @@ BinaCPP::get_allPrices( Json::Value &json_result )
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_allPrices> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -156,7 +162,9 @@ BinaCPP::get_price( const char *symbol )
 			break;
 		}
 		
-	}	
+    }
+
+    curl_easy_reset(BinaCPP::curl);
 	return ret;
 }
 
@@ -198,6 +206,8 @@ BinaCPP::get_allBookTickers(  Json::Value &json_result )
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -220,7 +230,9 @@ BinaCPP::get_bookTicker( const char *symbol, Json::Value &json_result )
 			break;
 		}
 		
-	}		
+    }
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -274,6 +286,8 @@ BinaCPP::get_depth(
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_depth> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -353,6 +367,8 @@ BinaCPP::get_aggTrades(
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -404,6 +420,8 @@ BinaCPP::get_24hr( const char *symbol, Json::Value &json_result )
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_24hr> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -481,6 +499,8 @@ BinaCPP::get_klines(
 	} else {
 		BinaCPP_logger::write_log( "<BinaCPP::get_klines> Failed to get anything." ) ;
 	}
+
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -568,6 +588,8 @@ BinaCPP::get_account( long recvWindow, unsigned long long timestamp,  Json::Valu
 	}
 
 	BinaCPP_logger::write_log( "<BinaCPP::get_account> Done.\n" ) ;
+
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -670,6 +692,8 @@ BinaCPP::get_myTrades(
 
 	BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Done.\n" ) ;
 
+    curl_easy_reset(BinaCPP::curl);
+
 }
 
 
@@ -762,6 +786,8 @@ BinaCPP::get_openOrders(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_openOrders> Done.\n" ) ;
+
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -876,6 +902,8 @@ BinaCPP::get_allOrders(
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_allOrders> Done.\n" ) ;
 
+    curl_easy_reset(BinaCPP::curl);
+
 }
 
 
@@ -910,8 +938,8 @@ BinaCPP::send_order(
 	const char *newClientOrderId,
 	double stopPrice,
 	double icebergQty,
-	long recvWindow,
     timestamp_t timestamp,
+	long recvWindow,
 	Json::Value &json_result ) 
 {	
 
@@ -1097,6 +1125,7 @@ BinaCPP::get_order(
 
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_order> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1203,6 +1232,7 @@ BinaCPP::cancel_order(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::send_order> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1259,6 +1289,7 @@ BinaCPP::start_userDataStream( Json::Value &json_result )
 	}
 
 	BinaCPP_logger::write_log( "<BinaCPP::start_userDataStream> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1311,6 +1342,7 @@ BinaCPP::keep_userDataStream( const char *listenKey )
 	}
 
 	BinaCPP_logger::write_log( "<BinaCPP::keep_userDataStream> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1359,6 +1391,7 @@ BinaCPP::close_userDataStream( const char *listenKey )
 	}
 
 	BinaCPP_logger::write_log( "<BinaCPP::close_userDataStream> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1463,6 +1496,7 @@ BinaCPP::withdraw(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::withdraw> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 
 }
 
@@ -1569,6 +1603,7 @@ BinaCPP::get_depositHistory(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_depostHistory> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -1684,6 +1719,7 @@ BinaCPP::get_withdrawHistory(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_withdrawHistory> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
@@ -1771,6 +1807,7 @@ BinaCPP::get_depositAddress(
 	}
 	
 	BinaCPP_logger::write_log( "<BinaCPP::get_depositAddress> Done.\n" ) ;
+    curl_easy_reset(BinaCPP::curl);
 }
 
 
