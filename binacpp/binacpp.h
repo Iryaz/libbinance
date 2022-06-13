@@ -93,6 +93,7 @@ class BinaCPP {
 			const char *symbol, 
 			long orderId,
 			int limit,
+            timestamp_t timestamp,
 			long recvWindow,
 			Json::Value &json_result 
 		);

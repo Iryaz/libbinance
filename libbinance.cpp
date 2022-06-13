@@ -102,7 +102,11 @@ void libbinance::get_allOrders(
     Json::Value &json_result
 )
 {
-    BinaCPP::get_allOrders(symbol, orderId, limit, recvWindow, json_result);
+    Json::Value serverTime;
+    timestamp_t timestamp = 0;
+    libbinance::get_serverTime(serverTime);
+    timestamp = serverTime["serverTime"].asUInt64();
+    BinaCPP::get_allOrders(symbol, orderId, limit, timestamp, recvWindow, json_result);
 }
 
 void libbinance::send_limit_order(const char *symbol, const char* side, double price, double qty, Json::Value &json_result, int recvWindow)

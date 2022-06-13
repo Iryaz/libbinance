@@ -825,6 +825,7 @@ BinaCPP::get_allOrders(
 	const char *symbol, 
 	long orderId,
 	int limit,
+    timestamp_t timestamp,
 	long recvWindow,
 	Json::Value &json_result 
 ) 
@@ -862,7 +863,7 @@ BinaCPP::get_allOrders(
 
 
 	querystring.append("&timestamp=");
-	querystring.append( to_string( get_current_ms_epoch() ) );
+    querystring.append( to_string( timestamp ) );
 
 	string signature =  hmac_sha256( secret_key.c_str(), querystring.c_str() );
 	querystring.append( "&signature=");
