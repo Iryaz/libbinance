@@ -16,50 +16,31 @@ public:
 void init(std::string &api_key, std::string &secret_key);
 void cleanup();
 
-void get_exchangeInfo(Json::Value &json_result);
-void get_serverTime(Json::Value &json_result);
+bool get_exchangeInfo(Json::Value &json_result);
+bool get_serverTime(Json::Value &json_result);
 
-void get_allPrices(Json::Value &json_result);
+bool get_allPrices(Json::Value &json_result);
 double get_price(const char *symbol);
 
-void get_allBookTickers(Json::Value &json_result );
-void get_bookTicker(const char *symbol, Json::Value &json_result) ;
+bool get_allBookTickers(Json::Value &json_result );
+bool get_bookTicker(const char *symbol, Json::Value &json_result) ;
 
-void get_depth(const char *symbol, int limit, Json::Value &json_result);
-void get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result);
-void get_24hr(const char *symbol, Json::Value &json_result);
-void get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result);
+bool get_depth(const char *symbol, int limit, Json::Value &json_result);
+bool get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result);
+bool get_24hr(const char *symbol, Json::Value &json_result);
+bool get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result);
 
 // API + Secret keys required
-void get_account(long recvWindow, timestamp_t timestamp, Json::Value &json_result);
+bool get_account(Json::Value &json_result, long recvWindow = 5000);
+bool get_myTrades(const char *symbol, int limit, long fromId, Json::Value &json_result, long recvWindow = 5000);
+bool get_openOrders(const char *symbol, Json::Value &json_result, long recvWindow = 5000);
 
-void get_myTrades(
-    const char *symbol,
-    int limit,
-    long fromId,
-    long recvWindow,
-    Json::Value &json_result
-);
+bool get_allOrders(const char *symbol, long orderId, int limit, Json::Value &json_result, long recvWindow = 5000);
 
-void get_openOrders(
-    const char *symbol,
-    long recvWindow,
-    Json::Value &json_result
-) ;
+bool send_limit_order(const char *symbol, const char *side, double price, double qty, Json::Value &json_result, int recvWindow = 5000);
+bool send_market_order(const char *symbol, const char *side, double qty, Json::Value &json_result, int recvWindow = 5000);
 
-
-void get_allOrders(
-    const char *symbol,
-    long orderId,
-    int limit,
-    long recvWindow,
-    Json::Value &json_result
-);
-
-void send_limit_order(const char *symbol, const char *side, double price, double qty, Json::Value &json_result, int recvWindow = 5000);
-void send_market_order(const char *symbol, const char *side, double qty, Json::Value &json_result, int recvWindow = 5000);
-
-void send_order(const char *symbol,
+bool send_order(const char *symbol,
     const char *side,
     const char *type,
     const char *timeInForce,
@@ -69,26 +50,19 @@ void send_order(const char *symbol,
     double stopPrice,
     double icebergQty,
     timestamp_t timestamp,
-    long recvWindow,
-    Json::Value &json_result);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 
-void get_order(
-    const char *symbol,
-    long orderId,
-    const char *origClientOrderId,
-    long recvWindow,
-    Json::Value &json_result);
+bool get_order(const char *symbol, long orderId, const char *origClientOrderId,
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 
-void cancel_order(
-    const char *symbol,
-    long orderId,
-    const char *origClientOrderId,
+bool cancel_order(const char *symbol, long orderId, const char *origClientOrderId,
     const char *newClientOrderId,
-    long recvWindow,
-    Json::Value &json_result
-);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 // API key required
 void start_userDataStream(Json::Value &json_result);
@@ -102,29 +76,29 @@ void withdraw(
     const char *addressTag,
     double amount,
     const char *name,
-    long recvWindow,
-    Json::Value &json_result);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 void get_depositHistory(
     const char *asset,
     int  status,
     long startTime,
     long endTime,
-    long recvWindow,
-    Json::Value &json_result);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 void get_withdrawHistory(
     const char *asset,
     int  status,
     long startTime,
     long endTime,
-    long recvWindow,
-    Json::Value &json_result);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 void get_depositAddress(
     const char *asset,
-    long recvWindow,
-    Json::Value &json_result);
+    Json::Value &json_result,
+    long recvWindow = 5000);
 
 void initWebSocket();
 void connect_endpoint(WebSocketCallbackObj* usr_cb, const char *path);

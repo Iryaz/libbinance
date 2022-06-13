@@ -6,3 +6,4 @@ Makefile.Debug
 Makefile.Release
 Makefile
 .qmake.stash
+libbinance.pro.user.*

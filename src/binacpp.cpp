@@ -7,10 +7,6 @@
 	C++ library for Binance API.
 */
 
-
-
-
-
 #include "binacpp.h"
 #include "binacpp_logger.h"
 #include "binacpp_utils.h"
@@ -19,93 +15,91 @@ string BinaCPP::api_key = "";
 string BinaCPP::secret_key = "";
 CURL* BinaCPP::curl = NULL;
 
-
-
-
-//---------------------------------
-void 
-BinaCPP::init( string &api_key, string &secret_key ) 
+void BinaCPP::init(string &api_key, string &secret_key)
 {
-	curl_global_init(CURL_GLOBAL_DEFAULT);
-	BinaCPP::curl = curl_easy_init();
-	BinaCPP::api_key = api_key;
-	BinaCPP::secret_key = secret_key;
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    BinaCPP::curl = curl_easy_init();
+    BinaCPP::api_key = api_key;
+    BinaCPP::secret_key = secret_key;
 }
 
 
-void
-BinaCPP::cleanup()
+void BinaCPP::cleanup()
 {
-	curl_easy_cleanup(BinaCPP::curl);
-	curl_global_cleanup();
+    curl_easy_cleanup(BinaCPP::curl);
+    curl_global_cleanup();
 }
 
 //------------------
 //GET api/v1/exchangeInfo
 //------------------
-void 
-BinaCPP::get_exchangeInfo( Json::Value &json_result)
+void BinaCPP::get_exchangeInfo(Json::Value &json_result)
 {
-	BinaCPP_logger::write_log( "<BinaCPP::get_exchangeInfo>" ) ;
+    BinaCPP_logger::write_log("<BinaCPP::get_exchangeInfo>");
 
-	string url(BINANCE_HOST);  
-	url += "/api/v1/exchangeInfo";
+    string url(BINANCE_HOST);
+    url += "/api/v1/exchangeInfo";
+    string str_result;
+    curl_api( url, str_result ) ;
 
-	string str_result;
-	curl_api( url, str_result ) ;
+    if (str_result.size() > 0) {
 
-	if ( str_result.size() > 0 ) {
-		
 		try {
-			Json::Reader reader;
-			json_result.clear();	
-			reader.parse( str_result , json_result );
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse(str_result, json_result);
 	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_exchangeInfo> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_exchangeInfo> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_exchangeInfo> Failed to get anything." ) ;
-	}
+        } catch (exception &e) {
+            BinaCPP_logger::write_log("<BinaCPP::get_exchangeInfo> Error ! %s", e.what());
+        }
+
+        BinaCPP_logger::write_log("<BinaCPP::get_exchangeInfo> Done.");
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_exchangeInfo> Failed to get anything.");
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
+
+timestamp_t BinaCPP::get_current_server_time()
+{
+    Json::Value serverTime;
+    timestamp_t timestamp = -1;
+    get_serverTime(serverTime);
+    if (!BinaCPP::IsError(serverTime))
+        return -1;
+
+    timestamp = serverTime["serverTime"].asUInt64();
+    return timestamp;
+}
+
 //------------------
 //GET /api/v1/time
 //------------
-void 
-BinaCPP::get_serverTime( Json::Value &json_result) 
+void BinaCPP::get_serverTime(Json::Value &json_result)
 {
-	BinaCPP_logger::write_log( "<BinaCPP::get_serverTime>" ) ;
+    BinaCPP_logger::write_log("<BinaCPP::get_serverTime>");
+    string url(BINANCE_HOST);
+    url += "/api/v1/time";
 
-	string url(BINANCE_HOST);  
-	url += "/api/v1/time";
+    string str_result;
+    curl_api(url, str_result);
 
-	string str_result;
-	curl_api( url, str_result ) ;
-
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-			reader.parse( str_result , json_result );
-	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_serverTime> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_serverTime> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_serverTime> Failed to get anything." ) ;
-	}
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse(str_result , json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log("<BinaCPP::get_serverTime> Error ! %s", e.what());
+        }
+        BinaCPP_logger::write_log("<BinaCPP::get_serverTime> Done.");
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_serverTime> Failed to get anything.");
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
-
-
 
 //--------------------
 // Get Latest price for all symbols.
@@ -116,28 +110,26 @@ void
 BinaCPP::get_allPrices( Json::Value &json_result ) 
 {	
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_allPrices>" ) ;
+    BinaCPP_logger::write_log("<BinaCPP::get_allPrices>");
 
 	string url(BINANCE_HOST);  
 	url += "/api/v1/ticker/allPrices";
 
 	string str_result;
-	curl_api( url, str_result ) ;
+    curl_api(url, str_result) ;
 
-	if ( str_result.size() > 0 ) {
-		
+    if (str_result.size() > 0) {
 		try {
 			Json::Reader reader;
 			json_result.clear();	
 			reader.parse( str_result , json_result );
-	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_allPrices> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_allPrices> Done." ) ;
-	
+
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_allPrices> Error ! %s", e.what());
+        }
+        BinaCPP_logger::write_log("<BinaCPP::get_allPrices> Done.");
 	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_allPrices> Failed to get anything." ) ;
+        BinaCPP_logger::write_log("<BinaCPP::get_allPrices> Failed to get anything.");
 	}
 
     curl_easy_reset(BinaCPP::curl);
@@ -146,31 +138,24 @@ BinaCPP::get_allPrices( Json::Value &json_result )
 
 //----------
 // Get Single Pair's Price
-double
-BinaCPP::get_price( const char *symbol )
+double BinaCPP::get_price(const char *symbol)
 {
-	BinaCPP_logger::write_log( "<BinaCPP::get_price>" ) ;
-
+    BinaCPP_logger::write_log("<BinaCPP::get_price>");
 	double ret = 0.0;
 	Json::Value alltickers;
 	string str_symbol = string_toupper(symbol);
-	get_allPrices( alltickers );
+    get_allPrices(alltickers);
 
-	for ( int i = 0 ; i < alltickers.size() ; i++ ) {
-		if ( alltickers[i]["symbol"].asString() == str_symbol ) {
-			ret = atof( alltickers[i]["price"].asString().c_str() );
-			break;
-		}
-		
+    for (int i = 0; i < alltickers.size(); i++ ) {
+        if (alltickers[i]["symbol"].asString() == str_symbol) {
+            ret = atof( alltickers[i]["price"].asString().c_str());
+            break;
+        }
     }
 
     curl_easy_reset(BinaCPP::curl);
 	return ret;
 }
-
-
-
-
 
 //--------------------
 // Get Best price/qty on the order book for all symbols.
@@ -179,63 +164,47 @@ BinaCPP::get_price( const char *symbol )
 	
 */
 
-void 
-BinaCPP::get_allBookTickers(  Json::Value &json_result ) 
-{	
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers>" ) ;
-
-	string url(BINANCE_HOST);  
-	url += "/api/v1/ticker/allBookTickers";
-
-	string str_result;
-	curl_api( url, str_result ) ;
-
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-	    		reader.parse( str_result , json_result );
-	    		
-	    	} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers> Failed to get anything." ) ;
-	}
-
-    curl_easy_reset(BinaCPP::curl);
-}
-
-
-
-//--------------
-void 
-BinaCPP::get_bookTicker( const char *symbol, Json::Value &json_result ) 
+void BinaCPP::get_allBookTickers(Json::Value &json_result)
 {
-	BinaCPP_logger::write_log( "<BinaCPP::get_BookTickers>" ) ;
+    BinaCPP_logger::write_log("<BinaCPP::get_allBookTickers>");
+    string url(BINANCE_HOST);
+    url += "/api/v1/ticker/allBookTickers";
 
-	Json::Value alltickers;
-	string str_symbol = string_toupper(symbol);
-	get_allBookTickers( alltickers );
+    string str_result;
+    curl_api(url, str_result);
 
-	for ( int i = 0 ; i < alltickers.size() ; i++ ) {
-		if ( alltickers[i]["symbol"].asString() == str_symbol ) {
-			
-			json_result = alltickers[i];
-			
-			break;
-		}
-		
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse(str_result, json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_allBookTickers> Error ! %s", e.what());
+        }
+
+        BinaCPP_logger::write_log("<BinaCPP::get_allBookTickers> Done.");
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_allBookTickers> Failed to get anything.");
     }
 
     curl_easy_reset(BinaCPP::curl);
 }
 
+void BinaCPP::get_bookTicker(const char *symbol, Json::Value &json_result)
+{
+    BinaCPP_logger::write_log("<BinaCPP::get_BookTickers>");
+    Json::Value alltickers;
+    string str_symbol = string_toupper(symbol);
+    get_allBookTickers(alltickers);
 
+    for (int i = 0 ; i < alltickers.size() ; i++) {
+        if (alltickers[i]["symbol"].asString() == str_symbol) {
+            json_result = alltickers[i];
+            break;
+        }
+    }
+    curl_easy_reset(BinaCPP::curl);
+}
 
 //--------------------
 // Get Market Depth
@@ -248,53 +217,37 @@ limit	INT		NO		Default 100; max 100.
 
 */
 
-void 
-BinaCPP::get_depth( 
-	const char *symbol, 
-	int limit, 
-	Json::Value &json_result ) 
-{	
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_depth>" ) ;
-
+void BinaCPP::get_depth(const char *symbol, int limit, Json::Value &json_result)
+{
+    BinaCPP_logger::write_log("<BinaCPP::get_depth>");
 	string url(BINANCE_HOST);  
-	url += "/api/v1/depth?";
+    url += "/api/v1/depth?";
 
-	string querystring("symbol=");
-	querystring.append( symbol );
-	querystring.append("&limit=");
-	querystring.append( to_string( limit ) );
+    string querystring("symbol=");
+    querystring.append( symbol );
+    querystring.append("&limit=");
+    querystring.append( to_string(limit));
 
-	url.append( querystring );
-	BinaCPP_logger::write_log( "<BinaCPP::get_depth> url = |%s|" , url.c_str() ) ;
-	
-	string str_result;
-	curl_api( url, str_result ) ;
+    url.append(querystring);
+    BinaCPP_logger::write_log("<BinaCPP::get_depth> url = |%s|", url.c_str());
+    string str_result;
+    curl_api(url, str_result);
 
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-	    		reader.parse( str_result , json_result );
-	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_depth> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_depth> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_depth> Failed to get anything." ) ;
-	}
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse( str_result , json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_depth> Error ! %s", e.what());
+        }
+        BinaCPP_logger::write_log("<BinaCPP::get_depth> Done.");
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_depth> Failed to get anything.");
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
-
-
-
-
-
-
 
 //--------------------
 // Get Aggregated Trades list
@@ -310,74 +263,54 @@ endTime		LONG	NO		Timestamp in ms to get aggregate trades until INCLUSIVE.
 limit		INT	NO		Default 500; max 500.
 */
 
-void 
-BinaCPP::get_aggTrades( 
-	const char *symbol, 
-	int fromId, 
+void BinaCPP::get_aggTrades(
+    const char *symbol,
+    int fromId,
     timestamp_t startTime,
     timestamp_t endTime,
 	int limit, 
 	Json::Value &json_result 
 ) 
 {	
+    BinaCPP_logger::write_log("<BinaCPP::get_aggTrades>");
+    string url(BINANCE_HOST);
+    url += "/api/v1/aggTrades?";
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades>" ) ;
+    string querystring("symbol=");
+    querystring.append(symbol);
 
-	string url(BINANCE_HOST);  
-	url += "/api/v1/aggTrades?";
-
-	string querystring("symbol=");
-	querystring.append( symbol );
-
-	
-	if ( startTime != 0 && endTime != 0 ) {
-
-		querystring.append("&startTime=");
-		querystring.append( to_string( startTime ) );
-
+    if (startTime != 0 && endTime != 0) {
+        querystring.append("&startTime=");
+        querystring.append(to_string(startTime));
 		querystring.append("&endTime=");
-		querystring.append( to_string( endTime ) );
-	
+        querystring.append( to_string(endTime));
 	} else {
-		querystring.append("&fromId=");
-		querystring.append( to_string( fromId ) );
-
+        querystring.append("&fromId=");
+        querystring.append( to_string( fromId));
 		querystring.append("&limit=");
-		querystring.append( to_string( limit ) );
-	}
+        querystring.append( to_string(limit));
+    }
 
-	url.append( querystring );
-	BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> url = |%s|" , url.c_str() ) ;
-	
+    url.append(querystring);
+    BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> url = |%s|" , url.c_str());
 	string str_result;
-	curl_api( url, str_result ) ;
-	
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-	    		reader.parse( str_result , json_result );
-	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Failed to get anything." ) ;
-	}
+    curl_api(url, str_result);
+
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse( str_result, json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Error ! %s", e.what());
+        }
+        BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Done.");
+    } else {
+        BinaCPP_logger::write_log( "<BinaCPP::get_aggTrades> Failed to get anything." ) ;
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
-
-
-
-
-
-
-
-
 
 //--------------------
 // Get 24hr ticker price change statistics
@@ -385,48 +318,34 @@ BinaCPP::get_aggTrades(
 Name	Type	Mandatory	Description
 symbol	STRING	YES	
 */
-void 
-BinaCPP::get_24hr( const char *symbol, Json::Value &json_result ) 
+void BinaCPP::get_24hr(const char *symbol, Json::Value &json_result)
 {	
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_24hr>" ) ;
-
+    BinaCPP_logger::write_log("<BinaCPP::get_24hr>");
 	string url(BINANCE_HOST);  
-	url += "/api/v1/ticker/24hr?";
+    url += "/api/v1/ticker/24hr?";
+    string querystring("symbol=");
+    querystring.append(symbol);
+    url.append(querystring);
+    BinaCPP_logger::write_log("<BinaCPP::get_24hr> url = |%s|", url.c_str());
+    string str_result;
+    curl_api(url, str_result);
 
-	string querystring("symbol=");
-	querystring.append( symbol );
-
-
-	
-	url.append( querystring );
-	BinaCPP_logger::write_log( "<BinaCPP::get_24hr> url = |%s|" , url.c_str() ) ;
-	
-	string str_result;
-	curl_api( url, str_result ) ;
-
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-	    		reader.parse( str_result , json_result );
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse( str_result , json_result );
 	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_24hr> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_24hr> Done." ) ;
-	
+        } catch (exception &e) {
+            BinaCPP_logger::write_log("<BinaCPP::get_24hr> Error ! %s", e.what());
+        }
+        BinaCPP_logger::write_log("<BinaCPP::get_24hr> Done.");
 	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_24hr> Failed to get anything." ) ;
-	}
+        BinaCPP_logger::write_log("<BinaCPP::get_24hr> Failed to get anything.");
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
-
-
-
-
 
 //-----------------
 /*
@@ -443,78 +362,55 @@ endTime		LONG	NO
 
 */
 
-void 
-BinaCPP::get_klines( 
-	const char *symbol, 
-	const char *interval, 
-	int limit, 
+void BinaCPP::get_klines(
+    const char *symbol,
+    const char *interval,
+    int limit,
     timestamp_t startTime,
     timestamp_t endTime,
-	Json::Value &json_result ) 
-{		
+    Json::Value &json_result)
+{
+    BinaCPP_logger::write_log("<BinaCPP::get_klines>");
+    string url(BINANCE_HOST);
+    url += "/api/v1/klines?";
+    string querystring("symbol=");
+    querystring.append(symbol);
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_klines>" ) ;
+    querystring.append("&interval=");
+    querystring.append(interval);
 
-	string url(BINANCE_HOST);  
-	url += "/api/v1/klines?";
-
-	string querystring("symbol=");
-	querystring.append( symbol );
-
-	querystring.append( "&interval=" );
-	querystring.append( interval );
-
-	if ( startTime > 0 && endTime > 0 ) {
-
-		querystring.append("&startTime=");
-		querystring.append( to_string( startTime ) );
-
-		querystring.append("&endTime=");
-		querystring.append( to_string( endTime ) );
-	
-	} else if ( limit > 0 ) {
-		querystring.append("&limit=");
-		querystring.append( to_string( limit ) );
+    if (startTime > 0 && endTime > 0) {
+        querystring.append("&startTime=");
+        querystring.append( to_string(startTime));
+        querystring.append("&endTime=");
+        querystring.append( to_string(endTime));
+    } else if (limit > 0) {
+        querystring.append("&limit=");
+        querystring.append(to_string(limit));
 	}
 
-	
-	url.append( querystring );
-	BinaCPP_logger::write_log( "<BinaCPP::get_klines> url = |%s|" , url.c_str() ) ;
-	
-	string str_result;
-	curl_api( url, str_result ) ;
+    url.append(querystring);
+    BinaCPP_logger::write_log("<BinaCPP::get_klines> url = |%s|", url.c_str());
+    string str_result;
+    curl_api(url, str_result);
 
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-	    		json_result.clear();	
-			reader.parse( str_result , json_result );
-	    		
-		} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_klines> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_klines> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_klines> Failed to get anything." ) ;
-	}
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse( str_result , json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_klines> Error ! %s", e.what());
+        }
+
+        BinaCPP_logger::write_log("<BinaCPP::get_klines> Done.");
+
+    } else {
+        BinaCPP_logger::write_log( "<BinaCPP::get_klines> Failed to get anything." ) ;
+    }
 
     curl_easy_reset(BinaCPP::curl);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //--------------------
 // Get current account information. (SIGNED)
@@ -528,77 +424,63 @@ timestamp	LONG	YES
 */
 
 
-void 
-BinaCPP::get_account( long recvWindow, unsigned long long timestamp,  Json::Value &json_result )
+void BinaCPP::get_account(long recvWindow, unsigned long long timestamp, Json::Value &json_result)
 {	
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_account>" ) ;
-
+    BinaCPP_logger::write_log("<BinaCPP::get_account>");
 	if ( api_key.size() == 0 || secret_key.size() == 0 ) {
-		BinaCPP_logger::write_log( "<BinaCPP::get_account> API Key and Secret Key has not been set." ) ;
-		return ;
+        BinaCPP_logger::write_log("<BinaCPP::get_account> API Key and Secret Key has not been set.");
+        return ;
+    }
+
+    string url(BINANCE_HOST);
+    url += "/api/v3/account?";
+    string action = "GET";
+
+    string querystring("timestamp=");
+    querystring.append(to_string(timestamp));
+
+    if (recvWindow > 0) {
+        querystring.append("&recvWindow=");
+        querystring.append(to_string(recvWindow));
 	}
 
+    string signature =  hmac_sha256(secret_key.c_str(), querystring.c_str());
+    querystring.append("&signature=");
+    querystring.append(signature);
 
-	string url(BINANCE_HOST);
-	url += "/api/v3/account?";
-	string action = "GET";
-	
+    url.append(querystring);
+    vector <string> extra_http_header;
+    string header_chunk("X-MBX-APIKEY: ");
+    header_chunk.append(api_key);
+    extra_http_header.push_back(header_chunk);
 
-	string querystring("timestamp=");
-    querystring.append( to_string( timestamp ) );
+    BinaCPP_logger::write_log( "<BinaCPP::get_account> url = |%s|" , url.c_str() ) ;
 
-	if ( recvWindow > 0 ) {
-		querystring.append("&recvWindow=");
-		querystring.append( to_string( recvWindow ) );
-	}
+    string post_data = "";
 
-	string signature =  hmac_sha256( secret_key.c_str() , querystring.c_str() );
-	querystring.append( "&signature=");
-	querystring.append( signature );
+    string str_result;
+    curl_api_with_header(url, str_result, extra_http_header, post_data, action);
 
-	url.append( querystring );
-	vector <string> extra_http_header;
-	string header_chunk("X-MBX-APIKEY: ");
-	header_chunk.append( api_key );
-	extra_http_header.push_back(header_chunk);
+    if (str_result.size() > 0) {
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_account> url = |%s|" , url.c_str() ) ;
-	
-	string post_data = "";
-	
-	string str_result;
-	curl_api_with_header( url, str_result , extra_http_header , post_data , action ) ;
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse(str_result, json_result);
+        } catch (exception &e) {
+            BinaCPP_logger::write_log("<BinaCPP::get_account> Error ! %s", e.what());
+        }
 
+        BinaCPP_logger::write_log("<BinaCPP::get_account> Done.");
 
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-			reader.parse( str_result , json_result );
-	    		
-	    	} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_account> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_account> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_account> Failed to get anything." ) ;
-	}
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_account> Failed to get anything.");
+    }
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_account> Done.\n" ) ;
+    BinaCPP_logger::write_log("<BinaCPP::get_account> Done.\n");
 
     curl_easy_reset(BinaCPP::curl);
-
 }
-
-
-
-
-
-
-
 
 //--------------------
 // Get trades for a specific account and symbol. (SIGNED)
@@ -613,98 +495,72 @@ timestamp	LONG	YES
 	
 */
 
-
-void 
-BinaCPP::get_myTrades( 
-	const char *symbol,
-	int limit,
-	long fromId,
-	long recvWindow, 
-	Json::Value &json_result ) 
+void BinaCPP::get_myTrades(const char *symbol, int limit, long fromId, long recvWindow,  Json::Value &json_result)
 {	
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_myTrades>" ) ;
-
-	if ( api_key.size() == 0 || secret_key.size() == 0 ) {
-		BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> API Key and Secret Key has not been set." ) ;
-		return ;
+    BinaCPP_logger::write_log("<BinaCPP::get_myTrades>");
+    if (api_key.size() == 0 || secret_key.size() == 0) {
+        BinaCPP_logger::write_log("<BinaCPP::get_myTrades> API Key and Secret Key has not been set.");
+        return;
 	}
 
+    string url(BINANCE_HOST);
+    url += "/api/v3/myTrades?";
 
-	string url(BINANCE_HOST);
-	url += "/api/v3/myTrades?";
+    string querystring("symbol=");
+    querystring.append( symbol );
 
-	string querystring("symbol=");
-	querystring.append( symbol );
+    if (limit > 0) {
+        querystring.append("&limit=");
+        querystring.append(to_string(limit));
+    }
 
-	if ( limit > 0 ) {
-		querystring.append("&limit=");
-		querystring.append( to_string( limit ) );
-	}
+    if (fromId > 0) {
+        querystring.append("&fromId=");
+        querystring.append(to_string(fromId));
+    }
 
-	if ( fromId > 0 ) {
-		querystring.append("&fromId=");
-		querystring.append( to_string( fromId ) );
-	}
+    if (recvWindow > 0) {
+        querystring.append("&recvWindow=");
+        querystring.append(to_string(recvWindow));
+    }
 
-	if ( recvWindow > 0 ) {
-		querystring.append("&recvWindow=");
-		querystring.append( to_string( recvWindow ) );
-	}
+    querystring.append("&timestamp=");
+    querystring.append(to_string(get_current_ms_epoch()));
 
-	querystring.append("&timestamp=");
-	querystring.append( to_string( get_current_ms_epoch() ) );
+    string signature =  hmac_sha256(secret_key.c_str(), querystring.c_str());
+    querystring.append("&signature=");
+    querystring.append(signature);
+    url.append(querystring);
+    vector <string> extra_http_header;
+    string header_chunk("X-MBX-APIKEY: ");
+    header_chunk.append(api_key);
+    extra_http_header.push_back(header_chunk);
 
-	string signature =  hmac_sha256( secret_key.c_str() , querystring.c_str() );
-	querystring.append( "&signature=");
-	querystring.append( signature );
+    BinaCPP_logger::write_log("<BinaCPP::get_myTrades> url = |%s|" , url.c_str());
+    string action = "GET";
+    string post_data = "";
 
-	url.append( querystring );
-	vector <string> extra_http_header;
-	string header_chunk("X-MBX-APIKEY: ");
-	header_chunk.append( api_key );
-	extra_http_header.push_back(header_chunk);
+    string str_result;
+    curl_api_with_header(url, str_result , extra_http_header , post_data , action);
 
-	BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> url = |%s|" , url.c_str() ) ;
-	
-	string action = "GET";
-	string post_data = "";
+    if (str_result.size() > 0) {
+        try {
+            Json::Reader reader;
+            json_result.clear();
+            reader.parse( str_result , json_result );
+        } catch (exception &e) {
+            BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Error ! %s", e.what());
+        }
 
-	string str_result;
-	curl_api_with_header( url, str_result , extra_http_header , post_data , action ) ;
+        BinaCPP_logger::write_log("<BinaCPP::get_myTrades> Done.");
 
+    } else {
+        BinaCPP_logger::write_log("<BinaCPP::get_myTrades> Failed to get anything.");
+    }
 
-	if ( str_result.size() > 0 ) {
-		
-		try {
-			Json::Reader reader;
-			json_result.clear();	
-			reader.parse( str_result , json_result );
-	    		
-	    	} catch ( exception &e ) {
-		 	BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Error ! %s", e.what() ); 
-		}   
-		BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Done." ) ;
-	
-	} else {
-		BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Failed to get anything." ) ;
-	}
-
-	BinaCPP_logger::write_log( "<BinaCPP::get_myTrades> Done.\n" ) ;
-
+    BinaCPP_logger::write_log("<BinaCPP::get_myTrades> Done.\n");
     curl_easy_reset(BinaCPP::curl);
-
 }
-
-
-
-
-
-
-
-
-
-
 
 //--------------------
 // Open Orders (SIGNED)
@@ -790,22 +646,6 @@ BinaCPP::get_openOrders(
     curl_easy_reset(BinaCPP::curl);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //--------------------
 // All Orders (SIGNED)
@@ -1151,14 +991,15 @@ timestamp			LONG	YES
 
 */
 
-void 
+void
 BinaCPP::cancel_order( 
 	const char *symbol, 
 	long orderId,
 	const char *origClientOrderId,
 	const char *newClientOrderId,
+    timestamp_t timestamp,
 	long recvWindow,
-	Json::Value &json_result ) 
+    Json::Value &json_result)
 {	
 
 	BinaCPP_logger::write_log( "<BinaCPP::send_order>" ) ;
@@ -1198,7 +1039,7 @@ BinaCPP::cancel_order(
 
 
 	post_data.append("&timestamp=");
-	post_data.append( to_string( get_current_ms_epoch() ) );
+    post_data.append(to_string(timestamp));
 
 
 	string signature =  hmac_sha256( secret_key.c_str(), post_data.c_str() );
@@ -1892,12 +1733,20 @@ BinaCPP::curl_api_with_header( string &url, string &str_result, vector <string> 
 		if ( res != CURLE_OK ) {
 			BinaCPP_logger::write_log( "<BinaCPP::curl_api> curl_easy_perform() failed: %s" , curl_easy_strerror(res) ) ;
 		} 	
-
 	}
 
 	BinaCPP_logger::write_log( "<BinaCPP::curl_api> done" ) ;
 
 }
 
+bool BinaCPP::IsError(Json::Value& result)
+{
+    if (result.isArray())
+        return true;
+    if (result.isNull())
+        return false;
+    if (result.get("code", 0).asInt() < 0)
+       return false;
 
-
+    return true;
+}

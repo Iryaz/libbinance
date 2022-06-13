@@ -12,24 +12,28 @@ void libbinance::cleanup()
     BinaCPP::cleanup();
 }
 
-void libbinance::get_exchangeInfo(Json::Value &json_result)
+bool libbinance::get_exchangeInfo(Json::Value &json_result)
 {
     BinaCPP::get_exchangeInfo(json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_serverTime(Json::Value &json_result)
+bool libbinance::get_serverTime(Json::Value &json_result)
 {
     BinaCPP::get_serverTime(json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void get_serverTime(Json::Value &json_result)
+bool get_serverTime(Json::Value &json_result)
 {
     BinaCPP::get_serverTime(json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_allPrices(Json::Value &json_result)
+bool libbinance::get_allPrices(Json::Value &json_result)
 {
     BinaCPP::get_allPrices(json_result);
+    return BinaCPP::IsError(json_result);
 }
 
 double libbinance::get_price(const char *symbol)
@@ -37,98 +41,96 @@ double libbinance::get_price(const char *symbol)
     return BinaCPP::get_price(symbol);
 }
 
-void libbinance::get_allBookTickers(Json::Value &json_result )
+bool libbinance::get_allBookTickers(Json::Value &json_result )
 {
     BinaCPP::get_allBookTickers(json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_bookTicker(const char *symbol, Json::Value &json_result)
+bool libbinance::get_bookTicker(const char *symbol, Json::Value &json_result)
 {
     BinaCPP::get_bookTicker(symbol, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_depth(const char *symbol, int limit, Json::Value &json_result)
+bool libbinance::get_depth(const char *symbol, int limit, Json::Value &json_result)
 {
     BinaCPP::get_depth(symbol, limit, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result)
+bool libbinance::get_aggTrades(const char *symbol, int fromId, timestamp_t startTime, timestamp_t endTime, int limit, Json::Value &json_result)
 {
     BinaCPP::get_aggTrades(symbol, fromId, startTime, endTime, limit, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_24hr(const char *symbol, Json::Value &json_result)
+bool libbinance::get_24hr(const char *symbol, Json::Value &json_result)
 {
     BinaCPP::get_24hr(symbol, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result)
+bool libbinance::get_klines(const char *symbol, const char *interval, int limit, timestamp_t startTime, timestamp_t endTime, Json::Value &json_result)
 {
     BinaCPP::get_klines(symbol, interval, limit, startTime, endTime, json_result);
+    return BinaCPP::IsError(json_result);
+    return true;
 }
 
 // API + Secret keys required
-void libbinance::get_account(long recvWindow, timestamp_t timestamp, Json::Value &json_result)
+bool libbinance::get_account(Json::Value &json_result, long recvWindow)
 {
+    timestamp_t timestamp = BinaCPP::get_current_server_time();
     BinaCPP::get_account(recvWindow, timestamp, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_myTrades(
+bool libbinance::get_myTrades(
     const char *symbol,
     int limit,
     long fromId,
-    long recvWindow,
-    Json::Value &json_result
-)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::get_myTrades(symbol, limit, fromId, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::get_openOrders(
-    const char *symbol,
-    long recvWindow,
-    Json::Value &json_result
-)
+bool libbinance::get_openOrders(const char *symbol, Json::Value &json_result, long recvWindow)
 {
     BinaCPP::get_openOrders(symbol, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
 
-void libbinance::get_allOrders(
+bool libbinance::get_allOrders(
     const char *symbol,
     long orderId,
     int limit,
-    long recvWindow,
-    Json::Value &json_result
-)
+    Json::Value &json_result,
+    long recvWindow)
 {
-    Json::Value serverTime;
-    timestamp_t timestamp = 0;
-    libbinance::get_serverTime(serverTime);
-    timestamp = serverTime["serverTime"].asUInt64();
+    timestamp_t timestamp = BinaCPP::get_current_server_time();
     BinaCPP::get_allOrders(symbol, orderId, limit, timestamp, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::send_limit_order(const char *symbol, const char* side, double price, double qty, Json::Value &json_result, int recvWindow)
+bool libbinance::send_limit_order(const char *symbol, const char* side, double price, double qty, Json::Value &json_result, int recvWindow)
 {
-    Json::Value serverTime;
-    timestamp_t timestamp = 0;
-    libbinance::get_serverTime(serverTime);
-    timestamp = serverTime["serverTime"].asUInt64();
-    send_order(symbol, side, "LIMIT", "GTC", qty, price, "", 0, 0, timestamp, recvWindow, json_result);
+    timestamp_t timestamp = BinaCPP::get_current_server_time();
+    send_order(symbol, side, "LIMIT", "GTC", qty, price, "", 0, 0, timestamp, json_result, recvWindow);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::send_market_order(const char *symbol, const char *side, double qty, Json::Value &json_result, int recvWindow)
+bool libbinance::send_market_order(const char *symbol, const char *side, double qty, Json::Value &json_result, int recvWindow)
 {
-    timestamp_t timestamp = 0;
-    Json::Value result;
-    libbinance::get_serverTime(result);
-    timestamp = result["serverTime"].asUInt64();
+    timestamp_t timestamp = BinaCPP::get_current_server_time();
     BinaCPP::send_order(symbol, side, "MARKET", "GTC", qty, 0, "", 0, 0, timestamp, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
-void libbinance::send_order(
-    const char *symbol,
+bool libbinance::send_order(const char *symbol,
     const char *side,
     const char *type,
     const char *timeInForce,
@@ -138,38 +140,43 @@ void libbinance::send_order(
     double stopPrice,
     double icebergQty,
     timestamp_t timestamp,
-    long recvWindow,
-    Json::Value &json_result)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::send_order(symbol, side, type, timeInForce,
-                        quantity, price, newClientOrderId,
-                        stopPrice, icebergQty, timestamp,
-                        recvWindow,
-                        json_result);
+        quantity, price, newClientOrderId,
+        stopPrice, icebergQty, timestamp,
+        recvWindow,
+        json_result);
+
+    return BinaCPP::IsError(json_result);
 }
 
 
-void libbinance::get_order(
+bool libbinance::get_order(
     const char *symbol,
     long orderId,
     const char *origClientOrderId,
-    long recvWindow,
-    Json::Value &json_result)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::get_order(symbol, orderId, origClientOrderId, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
 
-void libbinance::cancel_order(
+bool libbinance::cancel_order(
     const char *symbol,
     long orderId,
     const char *origClientOrderId,
     const char *newClientOrderId,
-    long recvWindow,
-    Json::Value &json_result
+    Json::Value &json_result,
+    long recvWindow
 )
 {
-    BinaCPP::cancel_order(symbol, orderId, origClientOrderId, newClientOrderId, recvWindow, json_result);
+    timestamp_t timestamp = BinaCPP::get_current_server_time();
+    BinaCPP::cancel_order(symbol, orderId, origClientOrderId, newClientOrderId, timestamp, recvWindow, json_result);
+    return BinaCPP::IsError(json_result);
 }
 
 // API key required
@@ -195,38 +202,35 @@ void libbinance::withdraw(
     const char *addressTag,
     double amount,
     const char *name,
-    long recvWindow,
-    Json::Value &json_result)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::withdraw(asset, address, addressTag, amount, name, recvWindow, json_result);
 }
 
-void libbinance::get_depositHistory(
-    const char *asset,
+void libbinance::get_depositHistory(const char *asset,
     int  status,
     long startTime,
     long endTime,
-    long recvWindow,
-    Json::Value &json_result)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::get_depositHistory(asset, status, startTime, endTime, recvWindow, json_result);
 }
 
-void libbinance::get_withdrawHistory(
-    const char *asset,
+void libbinance::get_withdrawHistory(const char *asset,
     int  status,
     long startTime,
     long endTime,
-    long recvWindow,
-    Json::Value &json_result)
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::get_withdrawHistory(asset, status, startTime, endTime, recvWindow, json_result);
 }
 
-void libbinance::get_depositAddress(
-    const char *asset,
-    long recvWindow,
-    Json::Value &json_result)
+void libbinance::get_depositAddress(const char *asset,
+    Json::Value &json_result,
+    long recvWindow)
 {
     BinaCPP::get_depositAddress(asset, recvWindow, json_result);
 }
