@@ -5,7 +5,7 @@ struct lws_context *BinaCPP_websocket::context = nullptr;
 struct lws_protocols BinaCPP_websocket::protocols[] =
 {
     {
-        "binance-ws",
+        "wss",
         BinaCPP_websocket::event_cb,
         0,
         65536,
@@ -17,8 +17,8 @@ lws_retry_bo BinaCPP_websocket::retry_settings {
     nullptr,
     0,
     65535,
-    30,
-    35,
+    2,
+    3000,
     20
 };
 
@@ -30,7 +30,7 @@ int BinaCPP_websocket::event_cb(struct lws *wsi, enum lws_callback_reasons reaso
         case LWS_CALLBACK_CLIENT_CLOSED:
             break;
         case LWS_CALLBACK_WSI_DESTROY:
-            reconnect_endpoints();
+            //reconnect_endpoints();
             BinaCPP_logger::write_log("Reconnect endpoints !!!!");
             break;
         case LWS_CALLBACK_CLIENT_RECEIVE_PONG:
